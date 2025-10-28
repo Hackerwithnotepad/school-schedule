@@ -482,10 +482,9 @@
         // CONFIGURATION - YOUR CALENDAR SETTINGS
         // ==========================================
         
-        // GOOGLE_API_KEY and CALENDAR_ID are now provided by Cloudflare Worker
-        // Frontend should call /api/events instead of using the key directly
-        const GOOGLE_API_KEY = 'YOUR_API_KEY_HERE';
-        const CALENDAR_ID = 'YOUR_CALENDAR_ID_HERE';
+        // If running locally with config.js, it will define window.CONFIG
+        const GOOGLE_API_KEY = window.CONFIG?.GOOGLE_API_KEY || 'YOUR_API_KEY_HERE';
+        const CALENDAR_ID   = window.CONFIG?.CALENDAR_ID || 'YOUR_CALENDAR_ID_HERE';
         
         // IMPORTANT: Your calendar must be PUBLIC for this to work
         // To make your calendar public:
