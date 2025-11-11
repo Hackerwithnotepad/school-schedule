@@ -220,18 +220,159 @@
             position: relative;
         }
         
-        /* Next Event Widget */
-        .next-event-widget {
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
+        /* Today View - Full Screen */
+        .today-view-overlay {
+            position: fixed;
             top: 0;
-            z-index: 50;
-            backdrop-filter: blur(10px);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
         
-        /* Next Event Widget - Minimized Button */
-        .next-event-minimized {
+        .today-view-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .today-view-container {
+            height: 100vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        .today-view-header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 10;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .today-view-clock {
+            font-size: 48px;
+            font-weight: 300;
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .today-view-date {
+            font-size: 14px;
+            text-align: center;
+            color: var(--text-tertiary);
+        }
+        
+        .today-view-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .today-view-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 32px 0 16px;
+            text-align: center;
+        }
+        
+        .current-event-card {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin: 24px 0;
+            text-align: center;
+            scroll-margin-top: 120px;
+        }
+        
+        .current-event-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .current-event-time {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+        
+        .current-event-countdown {
+            font-size: 48px;
+            font-weight: 300;
+            margin: 16px 0;
+        }
+        
+        .current-event-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 24px;
+        }
+        
+        .current-event-progress-fill {
+            height: 100%;
+            background: white;
+            transition: width 1s linear;
+        }
+        
+        .next-event-card, .past-event-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 12px 0;
+            transition: all 0.2s;
+        }
+        
+        .next-event-card:hover, .past-event-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .event-card-time {
+            font-size: 14px;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 8px;
+        }
+        
+        .event-card-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .event-card-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+        
+        .between-events-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-tertiary);
+        }
+        
+        .between-events-message svg {
+            margin: 0 auto 16px;
+            opacity: 0.5;
+        }
+        
+        /* Today View Minimized Button */
+        .today-view-minimized {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -249,33 +390,51 @@
             box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
         
-        /* Grows when event is within 2 hours */
-        .next-event-minimized.with-progress {
+        .today-view-minimized.with-progress {
             width: 60px;
             height: 60px;
         }
         
-        .next-event-minimized:hover {
+        .today-view-minimized:hover {
             transform: scale(1.1);
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
         }
         
         .progress-ring {
             position: absolute;
-            top: 0;
-            left: 0;
-            transform: rotate(-90deg);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-90deg);
+            transform-origin: center center;
             z-index: 1;
             transition: all 0.3s ease;
+            pointer-events: none;
         }
         
         .progress-ring-circle {
             transition: stroke-dashoffset 0.5s ease;
+            transform-origin: center center;
         }
         
-        .clock-icon {
-            position: relative;
-            z-index: 2;
+        .today-view-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .today-view-close-btn:hover {
+            background: var(--border-color);
+            transform: scale(1.1);
         }
         
         @keyframes pulse {
@@ -342,28 +501,38 @@
 </head>
 <body class="min-h-screen">
     
-    <!-- Next Event Widget -->
-    <!-- Next Event Widget - Full Bar -->
-    <div id="nextEventWidget" class="next-event-widget hidden cursor-pointer hover:bg-opacity-90 transition-colors" onclick="goToNextEvent()">
-        <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="text-sm font-medium text-secondary">Next:</span>
-                <span class="text-sm font-semibold text-primary" id="nextEventTitle">-</span>
-                <span class="text-xs text-tertiary" id="nextEventTime">-</span>
+    <!-- Today View - Full Screen Overlay -->
+    <div id="todayViewOverlay" class="today-view-overlay">
+        <div class="today-view-container" id="todayViewContainer">
+            <!-- Header with Clock -->
+            <div class="today-view-header">
+                <div class="today-view-clock" id="todayViewClock">12:00 PM</div>
+                <div class="today-view-date" id="todayViewDate">Today</div>
+                
+                <!-- Close Button -->
+                <button class="today-view-close-btn" onclick="closeTodayView()" title="Close (Esc)">
+                    <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
-            <button onclick="minimizeNextEventWidget(event)" class="text-tertiary hover:text-primary" title="Minimize">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
+            
+            <!-- Content -->
+            <div class="today-view-content">
+                <!-- Past Events Section -->
+                <div id="pastEventsSection"></div>
+                
+                <!-- Current Event or Between Events Message -->
+                <div id="currentEventSection"></div>
+                
+                <!-- Next Events Section -->
+                <div id="nextEventsSection"></div>
+            </div>
         </div>
     </div>
     
-    <!-- Next Event Widget - Minimized -->
-    <button id="nextEventMinimized" class="next-event-minimized hidden" onclick="restoreNextEventWidget()" title="Show next event">
+    <!-- Today View Minimized Button -->
+    <button id="todayViewMinimized" class="today-view-minimized hidden" onclick="openTodayView()" title="Open Today View">
         <!-- Circular progress ring -->
         <svg class="progress-ring" id="progressRingSvg" width="40" height="40" viewBox="0 0 40 40">
             <circle
@@ -383,9 +552,9 @@
                 </linearGradient>
             </defs>
         </svg>
-        <!-- Clock icon in center -->
-        <svg class="w-5 h-5 text-blue-600 clock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <!-- Calendar icon in center -->
+        <svg class="w-5 h-5 text-blue-600" style="position: relative; z-index: 2;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
     </button>
     
@@ -574,6 +743,30 @@
                     return;
                 }
                 
+                // Escape - Close overlays
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    const todayView = document.getElementById('todayViewOverlay');
+                    const shortcuts = document.getElementById('shortcutsOverlay');
+                    
+                    if (todayView && todayView.classList.contains('active')) {
+                        closeTodayView();
+                    } else if (shortcuts && !shortcuts.classList.contains('hidden')) {
+                        hideKeyboardShortcuts();
+                    }
+                    return;
+                }
+                
+                // Enter - Close shortcuts overlay
+                if (e.key === 'Enter') {
+                    const shortcuts = document.getElementById('shortcutsOverlay');
+                    if (shortcuts && !shortcuts.classList.contains('hidden')) {
+                        e.preventDefault();
+                        hideKeyboardShortcuts();
+                    }
+                    return;
+                }
+                
                 // Question mark or slash - Show keyboard shortcuts
                 if (e.key === '?' || e.key === '/') {
                     e.preventDefault();
@@ -584,25 +777,30 @@
                     e.preventDefault();
                     today();
                 }
-                // Left arrow - Previous
+                // Left arrow - Previous (Hebrew: Left Arrow)
                 else if (e.key === 'ArrowLeft') {
                     e.preventDefault();
                     previousWeek();
                 }
-                // Right arrow - Next
+                // Right arrow - Next (Hebrew: Right Arrow)
                 else if (e.key === 'ArrowRight') {
                     e.preventDefault();
                     nextWeek();
                 }
-                // D - Toggle dark mode
-                else if (e.key === 'd' || e.key === 'D') {
+                // D - Toggle dark mode (Hebrew: ד)
+                else if (e.key === 'd' || e.key === 'D' || e.key === 'ד') {
                     e.preventDefault();
                     toggleTheme();
                 }
-                // N - Toggle next event widget
-                else if (e.key === 'n' || e.key === 'N') {
+                // T - Open Today View (Hebrew: א for אתמול/today)
+                else if (e.key === 't' || e.key === 'T' || e.key === 'א') {
                     e.preventDefault();
-                    toggleNextEventWidget();
+                    const todayView = document.getElementById('todayViewOverlay');
+                    if (todayView.classList.contains('active')) {
+                        closeTodayView();
+                    } else {
+                        openTodayView();
+                    }
                 }
             });
             
@@ -655,7 +853,7 @@
                 if (cached) {
                     events = JSON.parse(cached);
                     renderCalendar();
-                    updateNextEventWidget();
+                    updateTodayView();
                     document.getElementById('calendar').classList.remove('hidden');
                 }
             } catch (e) {
@@ -698,7 +896,7 @@
                 saveCachedEvents();
                 
                 renderCalendar();
-                updateNextEventWidget();
+                updateTodayView();
                 showLoading(false);
                 
             } catch (error) {
@@ -723,7 +921,7 @@
             }
             
             document.getElementById('calendar').classList.remove('hidden');
-            updateNextEventWidget();
+            updateTodayView();
         }
         
         function renderDayView() {
@@ -1208,178 +1406,323 @@
         // NEXT EVENT WIDGET
         // ==========================================
         
-        function updateNextEventWidget() {
-            const widget = document.getElementById('nextEventWidget');
-            const miniButton = document.getElementById('nextEventMinimized');
+        // ==========================================
+        // TODAY VIEW - FULL SCREEN
+        // ==========================================
+        
+        let todayViewScrollTimeout = null;
+        let todayViewUpdateInterval = null;
+        
+        function openTodayView() {
+            const overlay = document.getElementById('todayViewOverlay');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            updateTodayView();
+            scrollToCurrentEvent();
+            
+            // Update clock every second
+            todayViewUpdateInterval = setInterval(updateTodayView, 1000);
+            
+            // Setup auto-scroll on user interaction
+            const container = document.getElementById('todayViewContainer');
+            container.addEventListener('scroll', handleTodayViewScroll);
+        }
+        
+        function closeTodayView() {
+            const overlay = document.getElementById('todayViewOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            if (todayViewUpdateInterval) {
+                clearInterval(todayViewUpdateInterval);
+                todayViewUpdateInterval = null;
+            }
+            
+            const container = document.getElementById('todayViewContainer');
+            container.removeEventListener('scroll', handleTodayViewScroll);
+        }
+        
+        function handleTodayViewScroll() {
+            // Clear existing timeout
+            if (todayViewScrollTimeout) {
+                clearTimeout(todayViewScrollTimeout);
+            }
+            
+            // Set new timeout to scroll back after 15 seconds of inactivity
+            todayViewScrollTimeout = setTimeout(() => {
+                scrollToCurrentEvent();
+            }, 15000);
+        }
+        
+        function scrollToCurrentEvent() {
+            const currentEventCard = document.querySelector('.current-event-card');
+            const betweenEventsMsg = document.querySelector('.between-events-message');
+            
+            if (currentEventCard) {
+                currentEventCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (betweenEventsMsg) {
+                // If between events, scroll to the "between events" message
+                betweenEventsMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        function updateTodayView() {
+            updateTodayViewClock();
+            updateTodayViewContent();
+            updateTodayViewButton();
+        }
+        
+        function updateTodayViewClock() {
             const now = new Date();
-
-            // Find ongoing event (currently happening, not all-day)
-            const ongoingEvents = events
-                .filter(event => {
-                    if (event.allDay) return false;
-                    const start = new Date(event.start);
-                    const end = new Date(event.end);
-                    return now >= start && now <= end;
-                })
-                .sort((a, b) => new Date(a.start) - new Date(b.start));
-
-            // Find the next upcoming event (not all-day, start > now)
+            const clockElement = document.getElementById('todayViewClock');
+            const dateElement = document.getElementById('todayViewDate');
+            
+            // 12-hour format
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            const timeString = `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+            
+            clockElement.textContent = timeString;
+            dateElement.textContent = now.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+        
+        function updateTodayViewContent() {
+            const now = new Date();
+            
+            // Get today's events (not all-day)
+            const todayEvents = events.filter(event => {
+                if (event.allDay) return false;
+                const eventStart = new Date(event.start);
+                return isSameDay(eventStart, now);
+            }).sort((a, b) => new Date(a.start) - new Date(b.start));
+            
+            // Find current event
+            const currentEvent = todayEvents.find(event => {
+                const start = new Date(event.start);
+                const end = new Date(event.end);
+                return now >= start && now <= end;
+            });
+            
+            // Split into past and future
+            const pastEvents = todayEvents.filter(event => new Date(event.end) < now);
+            const nextEvents = todayEvents.filter(event => new Date(event.start) > now);
+            
+            // Update sections
+            updatePastEventsSection(pastEvents);
+            updateCurrentEventSection(currentEvent, nextEvents[0]);
+            updateNextEventsSection(nextEvents);
+        }
+        
+        function updatePastEventsSection(pastEvents) {
+            const section = document.getElementById('pastEventsSection');
+            
+            if (pastEvents.length === 0) {
+                section.innerHTML = '';
+                return;
+            }
+            
+            section.innerHTML = `
+                <div class="today-view-section-title">Earlier Today</div>
+                ${pastEvents.map(event => createEventCard(event, 'past')).join('')}
+            `;
+        }
+        
+        function updateCurrentEventSection(currentEvent, nextEvent) {
+            const section = document.getElementById('currentEventSection');
+            
+            if (currentEvent) {
+                // Show current event prominently
+                const start = new Date(currentEvent.start);
+                const end = new Date(currentEvent.end);
+                const now = new Date();
+                
+                const totalDuration = end - start;
+                const elapsed = now - start;
+                const remaining = end - now;
+                const progress = (elapsed / totalDuration) * 100;
+                
+                // Format countdown
+                const minutesLeft = Math.floor(remaining / 60000);
+                const secondsLeft = Math.floor((remaining % 60000) / 1000);
+                const countdownText = minutesLeft > 0 
+                    ? `${minutesLeft}:${secondsLeft.toString().padStart(2, '0')}`
+                    : `${secondsLeft}s`;
+                
+                section.innerHTML = `
+                    <div class="today-view-section-title">Now</div>
+                    <div class="current-event-card">
+                        <div class="current-event-title">${escapeHtml(currentEvent.title)}</div>
+                        <div class="current-event-time">
+                            ${formatTime(currentEvent.start)} - ${formatTime(currentEvent.end)}
+                        </div>
+                        <div class="current-event-countdown">${countdownText}</div>
+                        ${currentEvent.description ? `<div class="current-event-description">${escapeHtml(currentEvent.description)}</div>` : ''}
+                        <div class="current-event-progress-bar">
+                            <div class="current-event-progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                `;
+            } else if (nextEvent) {
+                // Between events - show next event info
+                const now = new Date();
+                const nextStart = new Date(nextEvent.start);
+                const minutesUntil = Math.floor((nextStart - now) / 60000);
+                
+                section.innerHTML = `
+                    <div class="between-events-message">
+                        <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="text-lg font-medium text-primary">Between Classes</div>
+                        <div class="text-sm">Next: ${escapeHtml(nextEvent.title)} in ${minutesUntil} min</div>
+                    </div>
+                `;
+            } else {
+                // No more events today
+                section.innerHTML = `
+                    <div class="between-events-message">
+                        <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <div class="text-lg font-medium text-primary">All Done for Today!</div>
+                        <div class="text-sm">No more events scheduled</div>
+                    </div>
+                `;
+            }
+        }
+        
+        function updateNextEventsSection(nextEvents) {
+            const section = document.getElementById('nextEventsSection');
+            
+            if (nextEvents.length === 0) {
+                section.innerHTML = '';
+                return;
+            }
+            
+            section.innerHTML = `
+                <div class="today-view-section-title">Coming Up</div>
+                ${nextEvents.map(event => createEventCard(event, 'next')).join('')}
+            `;
+        }
+        
+        function createEventCard(event, type) {
+            const start = new Date(event.start);
+            const end = new Date(event.end);
+            const now = new Date();
+            
+            let timeInfo = '';
+            if (type === 'next') {
+                const minutesUntil = Math.floor((start - now) / 60000);
+                timeInfo = minutesUntil < 60 
+                    ? `in ${minutesUntil} min` 
+                    : `in ${Math.floor(minutesUntil / 60)}h ${minutesUntil % 60}m`;
+            }
+            
+            return `
+                <div class="${type === 'past' ? 'past-event-card' : 'next-event-card'}">
+                    <div class="event-card-time">
+                        ${formatTime(event.start)} - ${formatTime(event.end)}
+                        ${timeInfo ? `<span class="ml-2 text-tertiary">${timeInfo}</span>` : ''}
+                    </div>
+                    <div class="event-card-title">${escapeHtml(event.title)}</div>
+                    ${event.description ? `<div class="event-card-description">${escapeHtml(event.description)}</div>` : ''}
+                </div>
+            `;
+        }
+        
+        function updateTodayViewButton() {
+            const miniButton = document.getElementById('todayViewMinimized');
+            const progressCircle = document.getElementById('nextEventProgress');
+            const progressRingSvg = document.getElementById('progressRingSvg');
+            const now = new Date();
+            
+            // Find ongoing or upcoming event
+            const ongoingEvent = events.find(event => {
+                if (event.allDay) return false;
+                const start = new Date(event.start);
+                const end = new Date(event.end);
+                return now >= start && now <= end;
+            });
+            
             const upcomingEvents = events
                 .filter(event => !event.allDay && new Date(event.start) > now)
                 .sort((a, b) => new Date(a.start) - new Date(b.start));
-
-            let showEvent = null;
-            let eventType = null; // "ongoing" or "upcoming"
-            if (ongoingEvents.length > 0) {
-                showEvent = ongoingEvents[0];
-                eventType = "ongoing";
-            } else if (upcomingEvents.length > 0) {
-                showEvent = upcomingEvents[0];
-                eventType = "upcoming";
-            }
-
-            if (showEvent) {
-                const eventStart = new Date(showEvent.start);
-                const eventEnd = new Date(showEvent.end);
-                window.nextEventDate = eventStart;
-                document.getElementById('nextEventTitle').textContent = showEvent.title;
-                if (eventType === "ongoing") {
-                    // Show time left in event
-                    const msLeft = eventEnd - now;
-                    if (msLeft > 60 * 1000) {
-                        const minLeft = Math.ceil(msLeft / 60000);
-                        document.getElementById('nextEventTime').textContent = `${minLeft} min left`;
-                    } else {
-                        document.getElementById('nextEventTime').textContent = `ending soon`;
-                    }
-                } else {
-                    // Upcoming event
-                    document.getElementById('nextEventTime').textContent = getTimeUntil(eventStart);
-                }
-                // Update progress ring for either type
-                updateProgressRing(showEvent, eventType);
-                // Show widget or mini button based on previous state
-                const isMinimized = localStorage.getItem('nextEventMinimized') === 'true';
-                if (isMinimized) {
-                    widget.classList.add('hidden');
-                    miniButton.classList.remove('hidden');
-                } else {
-                    widget.classList.remove('hidden');
-                    miniButton.classList.add('hidden');
-                }
-            } else {
-                widget.classList.add('hidden');
-                miniButton.classList.add('hidden');
-                window.nextEventDate = null;
-            }
-        }
-        
-        // eventObj: event object, eventType: "ongoing" or "upcoming"
-        function updateProgressRing(eventObj, eventType) {
-            const progressCircle = document.getElementById('nextEventProgress');
-            const miniButton = document.getElementById('nextEventMinimized');
-            const progressRingSvg = document.getElementById('progressRingSvg');
-            if (!progressCircle || !miniButton || !progressRingSvg) return;
             
-            const now = new Date();
-            let progress = 0;
-            let showProgress = false;
-            
-            if (eventType === "ongoing") {
-                // For ongoing events: always show progress ring
-                const start = new Date(eventObj.start);
-                const end = new Date(eventObj.end);
-                const total = end - start;
-                const timeLeft = end - now;
-                if (total > 0) {
+            if (ongoingEvent || upcomingEvents.length > 0) {
+                miniButton.classList.remove('hidden');
+                
+                const eventToShow = ongoingEvent || upcomingEvents[0];
+                const eventStart = new Date(eventToShow.start);
+                const eventEnd = new Date(eventToShow.end);
+                
+                let progress = 0;
+                let showProgress = false;
+                
+                if (ongoingEvent) {
+                    // Ongoing event - always show progress
+                    const total = eventEnd - eventStart;
+                    const timeLeft = eventEnd - now;
                     progress = Math.min(Math.max(timeLeft / total, 0), 1);
-                } else {
-                    progress = 0;
-                }
-                showProgress = true;
-            } else {
-                // Upcoming: only show ring if event is within 2 hours
-                const start = new Date(eventObj.start);
-                const windowMs = 2 * 60 * 60 * 1000; // 2 hours
-                const msToEvent = start - now;
-                
-                if (msToEvent <= windowMs) {
                     showProgress = true;
-                    if (msToEvent <= 0) {
-                        progress = 1;
-                    } else {
+                } else {
+                    // Upcoming event - show if within 2 hours
+                    const windowMs = 2 * 60 * 60 * 1000;
+                    const msToEvent = eventStart - now;
+                    
+                    if (msToEvent <= windowMs) {
+                        showProgress = true;
                         progress = 1 - (msToEvent / windowMs);
+                        progress = Math.min(Math.max(progress, 0), 1);
                     }
-                    progress = Math.min(Math.max(progress, 0), 1);
                 }
-            }
-            
-            // Update button size and SVG dimensions based on whether we show progress
-            if (showProgress) {
-                miniButton.classList.add('with-progress');
-                // Larger button: 60x60
-                const size = 60;
-                const radius = (size / 2) - 5; // 25
-                const circumference = 2 * Math.PI * radius;
                 
-                progressRingSvg.setAttribute('width', size);
-                progressRingSvg.setAttribute('height', size);
-                progressCircle.setAttribute('r', radius);
-                progressCircle.setAttribute('cx', size / 2);
-                progressCircle.setAttribute('cy', size / 2);
-                progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
-                
-                const offset = circumference * (1 - progress);
-                progressCircle.style.strokeDashoffset = offset;
+                // Update button size and ring
+                if (showProgress) {
+                    miniButton.classList.add('with-progress');
+                    const size = 60;
+                    const radius = (size / 2) - 5;
+                    const circumference = 2 * Math.PI * radius;
+                    
+                    progressRingSvg.setAttribute('width', size);
+                    progressRingSvg.setAttribute('height', size);
+                    progressRingSvg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+                    progressCircle.setAttribute('r', radius);
+                    progressCircle.setAttribute('cx', size / 2);
+                    progressCircle.setAttribute('cy', size / 2);
+                    progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+                    
+                    const offset = circumference * (1 - progress);
+                    progressCircle.style.strokeDashoffset = offset;
+                } else {
+                    miniButton.classList.remove('with-progress');
+                    const size = 40;
+                    const radius = (size / 2) - 3;
+                    const circumference = 2 * Math.PI * radius;
+                    
+                    progressRingSvg.setAttribute('width', size);
+                    progressRingSvg.setAttribute('height', size);
+                    progressRingSvg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+                    progressCircle.setAttribute('r', radius);
+                    progressCircle.setAttribute('cx', size / 2);
+                    progressCircle.setAttribute('cy', size / 2);
+                    progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+                    progressCircle.style.strokeDashoffset = circumference;
+                }
             } else {
-                miniButton.classList.remove('with-progress');
-                // Smaller button: 40x40
-                const size = 40;
-                const radius = (size / 2) - 3; // 17
-                const circumference = 2 * Math.PI * radius;
-                
-                progressRingSvg.setAttribute('width', size);
-                progressRingSvg.setAttribute('height', size);
-                progressCircle.setAttribute('r', radius);
-                progressCircle.setAttribute('cx', size / 2);
-                progressCircle.setAttribute('cy', size / 2);
-                progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
-                progressCircle.style.strokeDashoffset = circumference; // Hidden
+                miniButton.classList.add('hidden');
             }
         }
         
-        function goToNextEvent() {
-            if (window.nextEventDate) {
-                currentDate = new Date(window.nextEventDate);
-                setView('day');
-            }
-        }
-        
-        function minimizeNextEventWidget(event) {
-            event.stopPropagation(); // Prevent goToNextEvent from firing
-            document.getElementById('nextEventWidget').classList.add('hidden');
-            document.getElementById('nextEventMinimized').classList.remove('hidden');
-            localStorage.setItem('nextEventMinimized', 'true');
-        }
-        
-        function restoreNextEventWidget() {
-            document.getElementById('nextEventWidget').classList.remove('hidden');
-            document.getElementById('nextEventMinimized').classList.add('hidden');
-            localStorage.setItem('nextEventMinimized', 'false');
-        }
-        
-        function toggleNextEventWidget() {
-            const widget = document.getElementById('nextEventWidget');
-            const miniButton = document.getElementById('nextEventMinimized');
-            
-            // Check which one is currently visible
-            if (!widget.classList.contains('hidden')) {
-                // Widget is visible, minimize it
-                minimizeNextEventWidget(new Event('keydown'));
-            } else if (!miniButton.classList.contains('hidden')) {
-                // Mini button is visible, restore widget
-                restoreNextEventWidget();
-            }
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
         
         function getTimeUntil(eventDate) {
@@ -1439,8 +1782,8 @@
                     <kbd class="shortcut-key">D</kbd>
                 </div>
                 <div class="shortcut-item">
-                    <span class="text-secondary">Hide/show next event bar</span>
-                    <kbd class="shortcut-key">N</kbd>
+                    <span class="text-secondary">Open Today View</span>
+                    <kbd class="shortcut-key">T</kbd>
                 </div>
                 <div class="shortcut-item">
                     <span class="text-secondary">Swipe left/right (mobile)</span>
