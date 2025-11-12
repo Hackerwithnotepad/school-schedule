@@ -220,8 +220,8 @@
             position: relative;
         }
         
-        /* Today View - Full Screen */
-        .today-view-overlay {
+        /* Now View - Full Screen */
+        .now-view-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -234,18 +234,18 @@
             transition: opacity 0.3s ease;
         }
         
-        .today-view-overlay.active {
+        .now-view-overlay.active {
             opacity: 1;
             pointer-events: all;
         }
         
-        .today-view-container {
+        .now-view-container {
             height: 100vh;
             overflow-y: auto;
             scroll-behavior: smooth;
         }
         
-        .today-view-header {
+        .now-view-header {
             position: sticky;
             top: 0;
             background: var(--bg-primary);
@@ -254,7 +254,7 @@
             border-bottom: 1px solid var(--border-color);
         }
         
-        .today-view-clock {
+        .now-view-clock {
             font-size: 48px;
             font-weight: 300;
             text-align: center;
@@ -262,19 +262,19 @@
             margin-bottom: 8px;
         }
         
-        .today-view-date {
+        .now-view-date {
             font-size: 14px;
             text-align: center;
             color: var(--text-tertiary);
         }
         
-        .today-view-content {
+        .now-view-content {
             max-width: 600px;
             margin: 0 auto;
             padding: 40px 20px;
         }
         
-        .today-view-section-title {
+        .now-view-section-title {
             font-size: 12px;
             font-weight: 600;
             color: var(--text-tertiary);
@@ -371,8 +371,8 @@
             opacity: 0.5;
         }
         
-        /* Today View Minimized Button */
-        .today-view-minimized {
+        /* Now View Minimized Button */
+        .now-view-minimized {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -390,12 +390,12 @@
             box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
         
-        .today-view-minimized.with-progress {
+        .now-view-minimized.with-progress {
             width: 60px;
             height: 60px;
         }
         
-        .today-view-minimized:hover {
+        .now-view-minimized:hover {
             transform: scale(1.1);
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
         }
@@ -416,7 +416,7 @@
             transform-origin: center center;
         }
         
-        .today-view-close-btn {
+        .now-view-close-btn {
             position: absolute;
             top: 20px;
             right: 20px;
@@ -432,7 +432,7 @@
             transition: all 0.2s;
         }
         
-        .today-view-close-btn:hover {
+        .now-view-close-btn:hover {
             background: var(--border-color);
             transform: scale(1.1);
         }
@@ -501,16 +501,16 @@
 </head>
 <body class="min-h-screen">
     
-    <!-- Today View - Full Screen Overlay -->
-    <div id="todayViewOverlay" class="today-view-overlay">
-        <div class="today-view-container" id="todayViewContainer">
+    <!-- Now View - Full Screen Overlay -->
+    <div id="nowViewOverlay" class="now-view-overlay">
+        <div class="now-view-container" id="nowViewContainer">
             <!-- Header with Clock -->
-            <div class="today-view-header">
-                <div class="today-view-clock" id="todayViewClock">12:00 PM</div>
-                <div class="today-view-date" id="todayViewDate">Today</div>
+            <div class="now-view-header">
+                <div class="now-view-clock" id="nowViewClock">12:00 PM</div>
+                <div class="now-view-date" id="nowViewDate">Today</div>
                 
                 <!-- Close Button -->
-                <button class="today-view-close-btn" onclick="closeTodayView()" title="Close (Esc)">
+                <button class="now-view-close-btn" onclick="closeNowView()" title="Close (Esc)">
                     <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -518,7 +518,7 @@
             </div>
             
             <!-- Content -->
-            <div class="today-view-content">
+            <div class="now-view-content">
                 <!-- Past Events Section -->
                 <div id="pastEventsSection"></div>
                 
@@ -531,8 +531,8 @@
         </div>
     </div>
     
-    <!-- Today View Minimized Button -->
-    <button id="todayViewMinimized" class="today-view-minimized hidden" onclick="openTodayView()" title="Open Today View">
+    <!-- Now View Minimized Button -->
+    <button id="nowViewMinimized" class="now-view-minimized hidden" onclick="openNowView()" title="Open Now View">
         <!-- Circular progress ring -->
         <svg class="progress-ring" id="progressRingSvg" width="40" height="40" viewBox="0 0 40 40">
             <circle
@@ -746,11 +746,11 @@
                 // Escape - Close overlays
                 if (e.key === 'Escape') {
                     e.preventDefault();
-                    const todayView = document.getElementById('todayViewOverlay');
+                    const nowView = document.getElementById('nowViewOverlay');
                     const shortcuts = document.getElementById('shortcutsOverlay');
                     
-                    if (todayView && todayView.classList.contains('active')) {
-                        closeTodayView();
+                    if (nowView && nowView.classList.contains('active')) {
+                        closeNowView();
                     } else if (shortcuts && !shortcuts.classList.contains('hidden')) {
                         hideKeyboardShortcuts();
                     }
@@ -787,19 +787,19 @@
                     e.preventDefault();
                     nextWeek();
                 }
-                // D - Toggle dark mode (Hebrew: ד)
-                else if (e.key === 'd' || e.key === 'D' || e.key === 'ד') {
+                // D - Toggle dark mode (Hebrew: ג on Hebrew keyboard)
+                else if (e.key === 'd' || e.key === 'D' || e.key === 'ג') {
                     e.preventDefault();
                     toggleTheme();
                 }
-                // T - Open Today View (Hebrew: א for אתמול/today)
+                // T - Open Now View (Hebrew: א on Hebrew keyboard)
                 else if (e.key === 't' || e.key === 'T' || e.key === 'א') {
                     e.preventDefault();
-                    const todayView = document.getElementById('todayViewOverlay');
-                    if (todayView.classList.contains('active')) {
-                        closeTodayView();
+                    const nowView = document.getElementById('nowViewOverlay');
+                    if (nowView.classList.contains('active')) {
+                        closeNowView();
                     } else {
-                        openTodayView();
+                        openNowView();
                     }
                 }
             });
@@ -853,7 +853,7 @@
                 if (cached) {
                     events = JSON.parse(cached);
                     renderCalendar();
-                    updateTodayView();
+                    updateNowView();
                     document.getElementById('calendar').classList.remove('hidden');
                 }
             } catch (e) {
@@ -896,7 +896,7 @@
                 saveCachedEvents();
                 
                 renderCalendar();
-                updateTodayView();
+                updateNowView();
                 showLoading(false);
                 
             } catch (error) {
@@ -921,7 +921,7 @@
             }
             
             document.getElementById('calendar').classList.remove('hidden');
-            updateTodayView();
+            updateNowView();
         }
         
         function renderDayView() {
@@ -1407,49 +1407,49 @@
         // ==========================================
         
         // ==========================================
-        // TODAY VIEW - FULL SCREEN
+        // NOW VIEW - FULL SCREEN
         // ==========================================
         
-        let todayViewScrollTimeout = null;
-        let todayViewUpdateInterval = null;
+        let nowViewScrollTimeout = null;
+        let nowViewUpdateInterval = null;
         
-        function openTodayView() {
-            const overlay = document.getElementById('todayViewOverlay');
+        function openNowView() {
+            const overlay = document.getElementById('nowViewOverlay');
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            updateTodayView();
+            updateNowView();
             scrollToCurrentEvent();
             
             // Update clock every second
-            todayViewUpdateInterval = setInterval(updateTodayView, 1000);
+            nowViewUpdateInterval = setInterval(updateNowView, 1000);
             
             // Setup auto-scroll on user interaction
-            const container = document.getElementById('todayViewContainer');
-            container.addEventListener('scroll', handleTodayViewScroll);
+            const container = document.getElementById('nowViewContainer');
+            container.addEventListener('scroll', handleNowViewScroll);
         }
         
-        function closeTodayView() {
-            const overlay = document.getElementById('todayViewOverlay');
+        function closeNowView() {
+            const overlay = document.getElementById('nowViewOverlay');
             overlay.classList.remove('active');
             document.body.style.overflow = '';
             
-            if (todayViewUpdateInterval) {
-                clearInterval(todayViewUpdateInterval);
-                todayViewUpdateInterval = null;
+            if (nowViewUpdateInterval) {
+                clearInterval(nowViewUpdateInterval);
+                nowViewUpdateInterval = null;
             }
             
-            const container = document.getElementById('todayViewContainer');
-            container.removeEventListener('scroll', handleTodayViewScroll);
+            const container = document.getElementById('nowViewContainer');
+            container.removeEventListener('scroll', handleNowViewScroll);
         }
         
-        function handleTodayViewScroll() {
+        function handleNowViewScroll() {
             // Clear existing timeout
-            if (todayViewScrollTimeout) {
-                clearTimeout(todayViewScrollTimeout);
+            if (nowViewScrollTimeout) {
+                clearTimeout(nowViewScrollTimeout);
             }
             
             // Set new timeout to scroll back after 15 seconds of inactivity
-            todayViewScrollTimeout = setTimeout(() => {
+            nowViewScrollTimeout = setTimeout(() => {
                 scrollToCurrentEvent();
             }, 15000);
         }
@@ -1466,16 +1466,16 @@
             }
         }
         
-        function updateTodayView() {
-            updateTodayViewClock();
-            updateTodayViewContent();
-            updateTodayViewButton();
+        function updateNowView() {
+            updateNowViewClock();
+            updateNowViewContent();
+            updateNowViewButton();
         }
         
-        function updateTodayViewClock() {
+        function updateNowViewClock() {
             const now = new Date();
-            const clockElement = document.getElementById('todayViewClock');
-            const dateElement = document.getElementById('todayViewDate');
+            const clockElement = document.getElementById('nowViewClock');
+            const dateElement = document.getElementById('nowViewDate');
             
             // 12-hour format
             let hours = now.getHours();
@@ -1492,7 +1492,7 @@
             });
         }
         
-        function updateTodayViewContent() {
+        function updateNowViewContent() {
             const now = new Date();
             
             // Get today's events (not all-day)
@@ -1528,8 +1528,8 @@
             }
             
             section.innerHTML = `
-                <div class="today-view-section-title">Earlier Today</div>
-                ${pastEvents.map(event => createEventCard(event, 'past')).join('')}
+                <div class="now-view-section-title">Earlier Today</div>
+                ${pastEvents.map(event => createNowViewEventCardHTML(event, 'past')).join('')}
             `;
         }
         
@@ -1555,7 +1555,7 @@
                     : `${secondsLeft}s`;
                 
                 section.innerHTML = `
-                    <div class="today-view-section-title">Now</div>
+                    <div class="now-view-section-title">Now</div>
                     <div class="current-event-card">
                         <div class="current-event-title">${escapeHtml(currentEvent.title)}</div>
                         <div class="current-event-time">
@@ -1606,12 +1606,12 @@
             }
             
             section.innerHTML = `
-                <div class="today-view-section-title">Coming Up</div>
-                ${nextEvents.map(event => createEventCard(event, 'next')).join('')}
+                <div class="now-view-section-title">Coming Up</div>
+                ${nextEvents.map(event => createNowViewEventCardHTML(event, 'next')).join('')}
             `;
         }
         
-        function createEventCard(event, type) {
+        function createNowViewEventCardHTML(event, type) {
             const start = new Date(event.start);
             const end = new Date(event.end);
             const now = new Date();
@@ -1636,8 +1636,8 @@
             `;
         }
         
-        function updateTodayViewButton() {
-            const miniButton = document.getElementById('todayViewMinimized');
+        function updateNowViewButton() {
+            const miniButton = document.getElementById('nowViewMinimized');
             const progressCircle = document.getElementById('nextEventProgress');
             const progressRingSvg = document.getElementById('progressRingSvg');
             const now = new Date();
@@ -1759,11 +1759,7 @@
             <div class="space-y-2">
                 <div class="shortcut-item">
                     <span class="text-secondary">Show this help</span>
-                    <div class="flex gap-2">
-                        <kbd class="shortcut-key">?</kbd>
-                        <span class="text-tertiary">or</span>
-                        <kbd class="shortcut-key">/</kbd>
-                    </div>
+                    <kbd class="shortcut-key">?</kbd>
                 </div>
                 <div class="shortcut-item">
                     <span class="text-secondary">Go to today</span>
@@ -1782,7 +1778,7 @@
                     <kbd class="shortcut-key">D</kbd>
                 </div>
                 <div class="shortcut-item">
-                    <span class="text-secondary">Open Today View</span>
+                    <span class="text-secondary">Open Now View</span>
                     <kbd class="shortcut-key">T</kbd>
                 </div>
                 <div class="shortcut-item">
@@ -1792,7 +1788,7 @@
             </div>
             
             <div class="mt-6 pt-4 border-t border-custom text-xs text-tertiary text-center">
-                Press <kbd class="shortcut-key inline-block px-2 py-1">Esc</kbd> or click outside to close
+                Press Esc or click outside to close
             </div>
         </div>
     </div>
