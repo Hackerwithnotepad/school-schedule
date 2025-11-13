@@ -25,6 +25,7 @@ Clone this repository and open `index.html` in your browser:
 git clone https://github.com/Hackerwithnotepad/school-schedule
 cd school-schedule
 open index.html
+```
 
 ## 📜 License
 
