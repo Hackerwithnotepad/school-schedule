@@ -121,13 +121,13 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Dark mode toggle */
-        .theme-toggle {
+        /* Settings Panel */
+        .settings-button {
             position: fixed;
             bottom: 20px;
             left: 20px;
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -137,24 +137,206 @@
             cursor: pointer;
             transition: all 0.3s ease;
             z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .theme-toggle:hover {
+        .settings-button:hover {
             transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
-        .theme-toggle svg {
-            width: 20px;
-            height: 20px;
+        .settings-button svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-secondary);
+            transition: transform 0.3s ease;
+        }
+        
+        .settings-button:hover svg {
+            transform: rotate(90deg);
+        }
+        
+        .settings-panel {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 280px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 99;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
             transition: all 0.3s ease;
         }
         
-        .sun-icon {
-            fill: #f59e0b;
+        .settings-panel.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
         }
         
-        .moon-icon {
-            fill: #64748b;
+        .settings-panel h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .settings-item {
+            margin-bottom: 16px;
+        }
+        
+        .settings-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .settings-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .settings-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background-color: var(--bg-tertiary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background-color: #3b82f6;
+        }
+        
+        .toggle-switch-handle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-switch.active .toggle-switch-handle {
+            transform: translateX(20px);
+        }
+        
+        .settings-select {
+            width: 100%;
+            padding: 8px 12px;
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .settings-select:hover {
+            background-color: var(--bg-secondary);
+        }
+        
+        .settings-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .settings-button-secondary {
+            width: 100%;
+            padding: 8px 12px;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .settings-button-secondary:hover {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .settings-button-secondary svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Event Colors & Markers */
+        .event-test {
+            border-left: 4px solid #ef4444 !important;
+            background: linear-gradient(to right, rgba(239, 68, 68, 0.1), transparent);
+        }
+        
+        .event-other {
+            border-left: 4px solid #8b5cf6 !important;
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.1), transparent);
+        }
+        
+        .current-event-card.event-test {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .current-event-card.event-other {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+        
+        /* Month view day markers */
+        .day-marker {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .day-marker.test {
+            background-color: #ef4444;
+        }
+        
+        .day-marker.other {
+            background-color: #8b5cf6;
+        }
+        
+        .day-marker.both {
+            background: linear-gradient(45deg, #ef4444 50%, #8b5cf6 50%);
+        }
+        
+        /* Week view day header highlight */
+        .week-day-header-test {
+            border-bottom: 2px solid #ef4444 !important;
+        }
+        
+        .week-day-header-other {
+            border-bottom: 2px solid #8b5cf6 !important;
+        }
+        
+        .week-day-header-both {
+            border-bottom: 2px solid;
+            border-image: linear-gradient(to right, #ef4444, #8b5cf6) 1;
         }
         
         /* Tooltip styles for hover notes */
@@ -558,15 +740,57 @@
         </svg>
     </button>
     
-    <!-- Dark Mode Toggle -->
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
-        </svg>
-        <svg class="moon-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd" />
+    <!-- Settings Button & Panel -->
+    <button class="settings-button" onclick="toggleSettings()" aria-label="Settings">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
     </button>
+    
+    <div class="settings-panel" id="settingsPanel">
+        <h3 id="settingsTitle">Settings</h3>
+        
+        <!-- Dark Mode Toggle -->
+        <div class="settings-item">
+            <div class="settings-toggle">
+                <span class="settings-label" id="settingsDarkMode">Dark Mode</span>
+                <div class="toggle-switch" id="darkModeToggle" onclick="toggleTheme()">
+                    <div class="toggle-switch-handle"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Show Only Tests Toggle -->
+        <div class="settings-item">
+            <div class="settings-toggle">
+                <span class="settings-label" id="settingsShowTests">Show Only Tests</span>
+                <div class="toggle-switch" id="showTestsToggle" onclick="toggleTestFilter()">
+                    <div class="toggle-switch-handle"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Language Selector -->
+        <div class="settings-item">
+            <label class="settings-label" id="settingsLanguage">Language</label>
+            <select class="settings-select" id="languageSelect" onchange="changeLanguage()">
+                <option value="auto" id="langAuto">Automatic</option>
+                <option value="en" id="langEn">English</option>
+                <option value="he" id="langHe">עברית</option>
+            </select>
+        </div>
+        
+        <!-- Refresh Button -->
+        <div class="settings-item">
+            <button class="settings-button-secondary" onclick="refreshSettings()">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span id="settingsRefresh">Refresh</span>
+            </button>
+        </div>
+    </div>
     
     <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         
@@ -664,6 +888,101 @@
         let currentView = 'day';
         let events = [];
         let nextEventDate = null; // Store the next event's date for clicking
+        let currentLang = 'en'; // Current language
+        let showOnlyTests = false; // Test filter state
+        
+        // ==========================================
+        // TRANSLATIONS
+        // ==========================================
+        
+        const translations = {
+            en: {
+                buttons: { previous: "Previous", today: "Today", next: "Next", day: "Day", week: "Week", month: "Month" },
+                shortcuts: { title: "Keyboard Shortcuts", showHelp: "Show this help", goToToday: "Go to today", previous: "Previous", next: "Next", toggleDarkMode: "Toggle dark mode", openNowView: "Open Now View", swipeMobile: "Swipe left/right (mobile)", navigateDays: "Navigate days", closeInstructions: "Press Esc or click outside to close" },
+                nowView: { closeButton: "Close (Esc)", openButton: "Open Now View", sectionTitles: { earlierToday: "Earlier Today", now: "Now", comingUp: "Coming Up" }, betweenEvents: { title: "Between Classes", nextPrefix: "Next:", inSuffix: "in", allDone: "All Done for Today!", noMoreEvents: "No more events scheduled" }, timeUnits: { min: "min", hours: "hours", days: "days", left: "left", endingSoon: "ending soon", startingSoon: "starting soon" } },
+                calendar: { title: "Calendar", noEvents: "No events", allDay: "All day", noEventsScheduled: "No events scheduled" },
+                daysShort: { sun: "Sun", mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat" },
+                daysFull: { sunday: "Sunday", monday: "Monday", tuesday: "Tuesday", wednesday: "Wednesday", thursday: "Thursday", friday: "Friday", saturday: "Saturday" },
+                months: { january: "January", february: "February", march: "March", april: "April", may: "May", june: "June", july: "July", august: "August", september: "September", october: "October", november: "November", december: "December" },
+                errors: { loadingEvents: "Loading events...", unableToLoad: "Unable to load calendar events. Please check your connection and try again.", connectionError: "Connection error" },
+                settings: { title: "Settings", darkMode: "Dark Mode", showTests: "Show Only Tests", language: "Language", refresh: "Refresh", auto: "Automatic", english: "English", hebrew: "עברית" },
+                time: { am: "AM", pm: "PM" }
+            },
+            he: {
+                buttons: { previous: "הקודם", today: "היום", next: "הבא", day: "יום", week: "שבוע", month: "חודש" },
+                shortcuts: { title: "קיצורי מקלדת", showHelp: "הצג עזרה זו", goToToday: "עבור להיום", previous: "הקודם", next: "הבא", toggleDarkMode: "החלף מצב כהה", openNowView: "פתח תצוגת עכשיו", swipeMobile: "החלק שמאלה/ימינה (נייד)", navigateDays: "נווט בין ימים", closeInstructions: "לחץ Esc או לחץ מחוץ לחלון כדי לסגור" },
+                nowView: { closeButton: "סגור (Esc)", openButton: "פתח תצוגת עכשיו", sectionTitles: { earlierToday: "מוקדם יותר היום", now: "עכשיו", comingUp: "בקרוב" }, betweenEvents: { title: "בין שיעורים", nextPrefix: "הבא:", inSuffix: "בעוד", allDone: "סיימנו להיום!", noMoreEvents: "אין עוד אירועים מתוכננים" }, timeUnits: { min: "דק'", hours: "שעות", days: "ימים", left: "נותרו", endingSoon: "מסתיים בקרוב", startingSoon: "מתחיל בקרוב" } },
+                calendar: { title: "לוח שנה", noEvents: "אין אירועים", allDay: "כל היום", noEventsScheduled: "אין אירועים מתוכננים" },
+                daysShort: { sun: "א'", mon: "ב'", tue: "ג'", wed: "ד'", thu: "ה'", fri: "ו'", sat: "ש'" },
+                daysFull: { sunday: "יום ראשון", monday: "יום שני", tuesday: "יום שלישי", wednesday: "יום רביעי", thursday: "יום חמישי", friday: "יום שישי", saturday: "שבת" },
+                months: { january: "ינואר", february: "פברואר", march: "מרץ", april: "אפריל", may: "מאי", june: "יוני", july: "יולי", august: "אוגוסט", september: "ספטמבר", october: "אוקטובר", november: "נובמבר", december: "דצמבר" },
+                errors: { loadingEvents: "טוען אירועים...", unableToLoad: "לא ניתן לטעון אירועי לוח שנה. אנא בדוק את החיבור שלך ונסה שוב.", connectionError: "שגיאת חיבור" },
+                settings: { title: "הגדרות", darkMode: "מצב כהה", showTests: "הצג רק מבחנים", language: "שפה", refresh: "רענן", auto: "אוטומטי", english: "English", hebrew: "עברית" },
+                time: { am: "לפנה\"צ", pm: "אחה\"צ" }
+            }
+        };
+        
+        // Hashtag patterns for event categorization
+        const EVENT_TAGS = {
+            test: ['#Test', '#מבחן', '#t', '#מ'],
+            other: ['#Other', '#אחר', '#o', '#א']
+        };
+        
+        // Translation helper
+        function t(path) {
+            const keys = path.split('.');
+            let value = translations[currentLang];
+            for (const key of keys) {
+                if (value && typeof value === 'object') value = value[key];
+                else return path;
+            }
+            return value || path;
+        }
+        
+        // ==========================================
+        // LANGUAGE & LOCALIZATION
+        // ==========================================
+        
+        function detectLanguage() {
+            const saved = localStorage.getItem('language');
+            if (saved && saved !== 'auto') return saved;
+            
+            const browserLang = navigator.language || navigator.userLanguage;
+            return browserLang.startsWith('he') ? 'he' : 'en';
+        }
+        
+        function initLanguage() {
+            currentLang = detectLanguage();
+            updateUILanguage();
+        }
+        
+        function changeLanguage() {
+            const select = document.getElementById('languageSelect');
+            const value = select.value;
+            localStorage.setItem('language', value);
+            currentLang = value === 'auto' ? detectLanguage() : value;
+            updateUILanguage();
+            renderCalendar();
+        }
+        
+        function updateUILanguage() {
+            // Update all translatable UI elements
+            document.getElementById('settingsTitle').textContent = t('settings.title');
+            document.getElementById('settingsDarkMode').textContent = t('settings.darkMode');
+            document.getElementById('settingsShowTests').textContent = t('settings.showTests');
+            document.getElementById('settingsLanguage').textContent = t('settings.language');
+            document.getElementById('settingsRefresh').textContent = t('settings.refresh');
+            document.getElementById('langAuto').textContent = t('settings.auto');
+            document.getElementById('langEn').textContent = t('settings.english');
+            document.getElementById('langHe').textContent = t('settings.hebrew');
+            
+            // Update language select
+            const savedLang = localStorage.getItem('language') || 'auto';
+            document.getElementById('languageSelect').value = savedLang;
+            
+            // Re-render calendar with new language
+            updateHeader();
+        }
         
         // ==========================================
         // DARK MODE FUNCTIONALITY
@@ -676,7 +995,7 @@
             
             if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
                 document.body.classList.add('dark-mode');
-                updateThemeIcon(true);
+                updateThemeToggle(true);
             }
         }
         
@@ -684,21 +1003,96 @@
         function toggleTheme() {
             const isDark = document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            updateThemeIcon(isDark);
+            updateThemeToggle(isDark);
         }
         
-        // Update the theme toggle icon
-        function updateThemeIcon(isDark) {
-            const sunIcon = document.querySelector('.sun-icon');
-            const moonIcon = document.querySelector('.moon-icon');
-            
+        // Update the theme toggle switch
+        function updateThemeToggle(isDark) {
+            const toggle = document.getElementById('darkModeToggle');
             if (isDark) {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
+                toggle.classList.add('active');
             } else {
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
+                toggle.classList.remove('active');
             }
+        }
+        
+        // ==========================================
+        // SETTINGS PANEL
+        // ==========================================
+        
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.classList.toggle('active');
+        }
+        
+        function refreshSettings() {
+            // Re-detect language and theme
+            currentLang = detectLanguage();
+            updateUILanguage();
+            
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+                document.body.classList.add('dark-mode');
+                updateThemeToggle(true);
+            } else {
+                document.body.classList.remove('dark-mode');
+                updateThemeToggle(false);
+            }
+            
+            renderCalendar();
+        }
+        
+        // ==========================================
+        // EVENT TAGGING & FILTERING
+        // ==========================================
+        
+        function parseEventType(title) {
+            const titleLower = title.toLowerCase();
+            
+            // Check for test tags
+            for (const tag of EVENT_TAGS.test) {
+                if (title.includes(tag) || titleLower.includes(tag.toLowerCase())) {
+                    return 'test';
+                }
+            }
+            
+            // Check for other/special tags
+            for (const tag of EVENT_TAGS.other) {
+                if (title.includes(tag) || titleLower.includes(tag.toLowerCase())) {
+                    return 'other';
+                }
+            }
+            
+            return null;
+        }
+        
+        function stripEventTag(title) {
+            // Remove hashtag and everything after it
+            for (const tags of Object.values(EVENT_TAGS)) {
+                for (const tag of tags) {
+                    const index = title.indexOf(tag);
+                    if (index !== -1) {
+                        return title.substring(0, index).trim();
+                    }
+                }
+            }
+            return title;
+        }
+        
+        function toggleTestFilter() {
+            showOnlyTests = !showOnlyTests;
+            const toggle = document.getElementById('showTestsToggle');
+            if (showOnlyTests) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+            renderCalendar();
+        }
+        
+        function getFilteredEvents() {
+            if (!showOnlyTests) return events;
+            return events.filter(event => parseEventType(event.title) === 'test');
         }
         
         // ==========================================
@@ -707,6 +1101,7 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             initTheme();
+            initLanguage();
             updateHeader();
             
             // Load cached events first for instant display
@@ -792,8 +1187,8 @@
                     e.preventDefault();
                     toggleTheme();
                 }
-                // T - Open Now View (Hebrew: א on Hebrew keyboard)
-                else if (e.key === 't' || e.key === 'T' || e.key === 'א') {
+                // N - Open Now View (Hebrew: מ on Hebrew keyboard)
+                else if (e.key === 'n' || e.key === 'N' || e.key === 'מ') {
                     e.preventDefault();
                     const nowView = document.getElementById('nowViewOverlay');
                     if (nowView.classList.contains('active')) {
@@ -832,6 +1227,18 @@
                     }
                 }
             }
+            
+            // Click outside settings panel to close
+            document.addEventListener('click', (e) => {
+                const settingsPanel = document.getElementById('settingsPanel');
+                const settingsButton = document.querySelector('.settings-button');
+                
+                if (settingsPanel.classList.contains('active') && 
+                    !settingsPanel.contains(e.target) && 
+                    !settingsButton.contains(e.target)) {
+                    settingsPanel.classList.remove('active');
+                }
+            });
         });
         
         // ==========================================
@@ -1046,6 +1453,10 @@
                 const dayEvents = getEventsForDate(day);
                 const isToday = isSameDay(day, new Date());
                 
+                // Check for event types in this day
+                const hasTest = dayEvents.some(e => parseEventType(e.title) === 'test');
+                const hasOther = dayEvents.some(e => parseEventType(e.title) === 'other');
+                
                 const dayColumn = document.createElement('div');
                 dayColumn.className = 'card-bg rounded-lg p-4 min-h-[200px] fade-in border border-custom cursor-pointer hover:border-blue-400 transition-all';
                 dayColumn.style.animationDelay = `${i * 50}ms`;
@@ -1056,9 +1467,20 @@
                     setView('day');
                 };
                 
-                // Day header
+                // Day header with event type highlighting
                 const header = document.createElement('div');
-                header.className = `mb-3 pb-3 ${isToday ? 'border-b-2 border-blue-500' : 'border-b border-custom'}`;
+                let headerClass = `mb-3 pb-3 ${isToday ? 'border-b-2 border-blue-500' : 'border-b border-custom'}`;
+                
+                // Add event type highlighting to header
+                if (!isToday && hasTest && hasOther) {
+                    headerClass = 'mb-3 pb-3 week-day-header-both';
+                } else if (!isToday && hasTest) {
+                    headerClass = 'mb-3 pb-3 week-day-header-test';
+                } else if (!isToday && hasOther) {
+                    headerClass = 'mb-3 pb-3 week-day-header-other';
+                }
+                
+                header.className = headerClass;
                 header.innerHTML = `
                     <div class="text-xs font-medium text-tertiary uppercase">${formatDayName(day)}</div>
                     <div class="${isToday ? 'text-2xl font-semibold text-blue-600' : 'text-2xl font-light text-primary'}">${day.getDate()}</div>
@@ -1069,7 +1491,7 @@
                 if (dayEvents.length === 0) {
                     const noEvents = document.createElement('div');
                     noEvents.className = 'text-sm text-tertiary italic';
-                    noEvents.textContent = 'No events';
+                    noEvents.textContent = t('calendar.noEvents');
                     dayColumn.appendChild(noEvents);
                 } else {
                     dayEvents.forEach(event => {
@@ -1107,8 +1529,12 @@
                 const isToday = isSameDay(day, new Date());
                 const isCurrentMonth = day.getMonth() === currentDate.getMonth();
                 
+                // Check for event types
+                const hasTest = dayEvents.some(e => parseEventType(e.title) === 'test');
+                const hasOther = dayEvents.some(e => parseEventType(e.title) === 'other');
+                
                 const dayCell = document.createElement('div');
-                dayCell.className = `card-bg rounded-lg p-3 min-h-[100px] border border-custom ${isCurrentMonth ? 'cursor-pointer hover:border-blue-400' : 'opacity-40'} fade-in transition-all`;
+                dayCell.className = `card-bg rounded-lg p-3 min-h-[100px] border border-custom ${isCurrentMonth ? 'cursor-pointer hover:border-blue-400' : 'opacity-40'} fade-in transition-all relative`;
                 dayCell.style.animationDelay = `${i * 10}ms`;
                 
                 // Add click handler to navigate to day view
@@ -1117,6 +1543,19 @@
                         currentDate = new Date(day);
                         setView('day');
                     };
+                }
+                
+                // Add day marker for test/other events
+                if (hasTest || hasOther) {
+                    const marker = document.createElement('div');
+                    if (hasTest && hasOther) {
+                        marker.className = 'day-marker both';
+                    } else if (hasTest) {
+                        marker.className = 'day-marker test';
+                    } else {
+                        marker.className = 'day-marker other';
+                    }
+                    dayCell.appendChild(marker);
                 }
                 
                 // Day number
@@ -1131,9 +1570,10 @@
                 
                 // Events (show first 3)
                 dayEvents.slice(0, 3).forEach(event => {
+                    const displayTitle = stripEventTag(event.title);
                     const eventDot = document.createElement('div');
                     eventDot.className = 'text-xs text-secondary truncate mb-1 hover:text-primary cursor-pointer transition-colors event-tooltip month-event-tooltip relative';
-                    eventDot.textContent = `• ${event.title}`;
+                    eventDot.textContent = `• ${displayTitle}`;
                     
                     // Stop propagation so hovering/clicking event doesn't trigger day cell
                     eventDot.onclick = (e) => {
@@ -1144,11 +1584,11 @@
                     const tooltip = document.createElement('div');
                     tooltip.className = 'tooltip-content text-xs';
                     
-                    let tooltipHTML = `<div class="font-semibold text-sm mb-2">${event.title}</div>`;
+                    let tooltipHTML = `<div class="font-semibold text-sm mb-2">${displayTitle}</div>`;
                     
                     // Time range
                     if (event.allDay) {
-                        tooltipHTML += `<div class="mb-2 text-tertiary">All day</div>`;
+                        tooltipHTML += `<div class="mb-2 text-tertiary">${t('calendar.allDay')}</div>`;
                     } else {
                         tooltipHTML += `<div class="mb-2 text-tertiary">${formatTimeRange(event.start, event.end)}</div>`;
                     }
@@ -1187,16 +1627,26 @@
         }
         
         function createEventCard(event) {
+            const eventType = parseEventType(event.title);
+            const displayTitle = stripEventTag(event.title);
+            
             const card = document.createElement('div');
             card.className = 'event-card event-tooltip rounded-lg p-3 mb-2 cursor-pointer border';
             
+            // Apply event type styling
+            if (eventType === 'test') {
+                card.classList.add('event-test');
+            } else if (eventType === 'other') {
+                card.classList.add('event-other');
+            }
+            
             const time = document.createElement('div');
             time.className = 'text-xs font-medium text-tertiary mb-1';
-            time.textContent = event.allDay ? 'All day' : formatTime(event.start);
+            time.textContent = event.allDay ? t('calendar.allDay') : formatTime(event.start);
             
             const title = document.createElement('div');
             title.className = 'text-sm font-medium text-primary';
-            title.textContent = event.title;
+            title.textContent = displayTitle;
             
             card.appendChild(time);
             card.appendChild(title);
@@ -1206,11 +1656,11 @@
                 const tooltip = document.createElement('div');
                 tooltip.className = 'tooltip-content text-xs';
                 
-                let tooltipHTML = `<div class="font-semibold text-sm mb-2">${event.title}</div>`;
+                let tooltipHTML = `<div class="font-semibold text-sm mb-2">${displayTitle}</div>`;
                 
                 // Time range (compact)
                 if (event.allDay) {
-                    tooltipHTML += `<div class="mb-2 text-tertiary">All day</div>`;
+                    tooltipHTML += `<div class="mb-2 text-tertiary">${t('calendar.allDay')}</div>`;
                 } else {
                     tooltipHTML += `<div class="mb-2 text-tertiary">${formatTimeRange(event.start, event.end)}</div>`;
                 }
@@ -1243,7 +1693,7 @@
         // ==========================================
         
         function getEventsForDate(date) {
-            return events.filter(event => {
+            return getFilteredEvents().filter(event => {
                 const eventStart = new Date(event.start);
                 const eventEnd = new Date(event.end);
                 
@@ -1276,16 +1726,18 @@
         }
         
         function formatDayName(date) {
-            return date.toLocaleDateString('en-US', { weekday: 'short' });
+            const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const dayIndex = date.getDay();
+            return translations[currentLang].daysShort[days[dayIndex]];
         }
         
         function formatTime(dateString) {
             const date = new Date(dateString);
-            return date.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: true 
-            });
+            let hours = date.getHours();
+            const minutes = date.getMinutes();
+            const ampm = hours >= 12 ? t('time.pm') : t('time.am');
+            hours = hours % 12 || 12;
+            return `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
         }
         
         function formatTimeRange(startString, endString) {
@@ -1293,11 +1745,27 @@
         }
         
         function updateHeader() {
-            const monthYear = currentDate.toLocaleDateString('en-US', { 
-                month: 'long', 
-                year: 'numeric' 
-            });
+            const months = ['january', 'february', 'march', 'april', 'may', 'june',
+                           'july', 'august', 'september', 'october', 'november', 'december'];
+            const monthName = translations[currentLang].months[months[currentDate.getMonth()]];
+            const year = currentDate.getFullYear();
+            const monthYear = `${monthName} ${year}`;
             document.getElementById('currentMonth').textContent = monthYear;
+            
+            // Update button text
+            const btnPrev = document.querySelector('button[onclick="previousWeek()"]');
+            const btnToday = document.querySelector('button[onclick="today()"]');
+            const btnNext = document.querySelector('button[onclick="nextWeek()"]');
+            const btnDay = document.querySelector('button[onclick="setView(\'day\')"]');
+            const btnWeek = document.querySelector('button[onclick="setView(\'week\')"]');
+            const btnMonth = document.querySelector('button[onclick="setView(\'month\')"]');
+            
+            if (btnPrev) btnPrev.textContent = t('buttons.previous');
+            if (btnToday) btnToday.textContent = t('buttons.today');
+            if (btnNext) btnNext.textContent = t('buttons.next');
+            if (btnDay) btnDay.textContent = t('buttons.day');
+            if (btnWeek) btnWeek.textContent = t('buttons.week');
+            if (btnMonth) btnMonth.textContent = t('buttons.month');
         }
         
         function showLoading(show) {
@@ -1528,7 +1996,7 @@
             }
             
             section.innerHTML = `
-                <div class="now-view-section-title">Earlier Today</div>
+                <div class="now-view-section-title">${t('nowView.sectionTitles.earlierToday')}</div>
                 ${pastEvents.map(event => createNowViewEventCardHTML(event, 'past')).join('')}
             `;
         }
@@ -1538,6 +2006,8 @@
             
             if (currentEvent) {
                 // Show current event prominently
+                const displayTitle = stripEventTag(currentEvent.title);
+                const eventType = parseEventType(currentEvent.title);
                 const start = new Date(currentEvent.start);
                 const end = new Date(currentEvent.end);
                 const now = new Date();
@@ -1554,10 +2024,12 @@
                     ? `${minutesLeft}:${secondsLeft.toString().padStart(2, '0')}`
                     : `${secondsLeft}s`;
                 
+                const typeClass = eventType === 'test' ? ' event-test' : (eventType === 'other' ? ' event-other' : '');
+                
                 section.innerHTML = `
-                    <div class="now-view-section-title">Now</div>
-                    <div class="current-event-card">
-                        <div class="current-event-title">${escapeHtml(currentEvent.title)}</div>
+                    <div class="now-view-section-title">${t('nowView.sectionTitles.now')}</div>
+                    <div class="current-event-card${typeClass}">
+                        <div class="current-event-title">${escapeHtml(displayTitle)}</div>
                         <div class="current-event-time">
                             ${formatTime(currentEvent.start)} - ${formatTime(currentEvent.end)}
                         </div>
@@ -1570,17 +2042,19 @@
                 `;
             } else if (nextEvent) {
                 // Between events - show next event info
+                const displayTitle = stripEventTag(nextEvent.title);
                 const now = new Date();
                 const nextStart = new Date(nextEvent.start);
                 const minutesUntil = Math.floor((nextStart - now) / 60000);
+                const units = translations[currentLang].nowView.timeUnits;
                 
                 section.innerHTML = `
                     <div class="between-events-message">
                         <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <div class="text-lg font-medium text-primary">Between Classes</div>
-                        <div class="text-sm">Next: ${escapeHtml(nextEvent.title)} in ${minutesUntil} min</div>
+                        <div class="text-lg font-medium text-primary">${t('nowView.betweenEvents.title')}</div>
+                        <div class="text-sm">${t('nowView.betweenEvents.nextPrefix')} ${escapeHtml(displayTitle)} ${units.inSuffix} ${minutesUntil} ${units.min}</div>
                     </div>
                 `;
             } else {
@@ -1590,8 +2064,8 @@
                         <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        <div class="text-lg font-medium text-primary">All Done for Today!</div>
-                        <div class="text-sm">No more events scheduled</div>
+                        <div class="text-lg font-medium text-primary">${t('nowView.betweenEvents.allDone')}</div>
+                        <div class="text-sm">${t('nowView.betweenEvents.noMoreEvents')}</div>
                     </div>
                 `;
             }
@@ -1606,12 +2080,14 @@
             }
             
             section.innerHTML = `
-                <div class="now-view-section-title">Coming Up</div>
+                <div class="now-view-section-title">${t('nowView.sectionTitles.comingUp')}</div>
                 ${nextEvents.map(event => createNowViewEventCardHTML(event, 'next')).join('')}
             `;
         }
         
         function createNowViewEventCardHTML(event, type) {
+            const displayTitle = stripEventTag(event.title);
+            const eventType = parseEventType(event.title);
             const start = new Date(event.start);
             const end = new Date(event.end);
             const now = new Date();
@@ -1619,18 +2095,22 @@
             let timeInfo = '';
             if (type === 'next') {
                 const minutesUntil = Math.floor((start - now) / 60000);
+                const units = translations[currentLang].nowView.timeUnits;
                 timeInfo = minutesUntil < 60 
-                    ? `in ${minutesUntil} min` 
-                    : `in ${Math.floor(minutesUntil / 60)}h ${minutesUntil % 60}m`;
+                    ? `${units.inSuffix} ${minutesUntil} ${units.min}` 
+                    : `${units.inSuffix} ${Math.floor(minutesUntil / 60)}h ${minutesUntil % 60}m`;
             }
             
+            const cardClass = type === 'past' ? 'past-event-card' : 'next-event-card';
+            const typeClass = eventType === 'test' ? ' event-test' : (eventType === 'other' ? ' event-other' : '');
+            
             return `
-                <div class="${type === 'past' ? 'past-event-card' : 'next-event-card'}">
+                <div class="${cardClass}${typeClass}">
                     <div class="event-card-time">
                         ${formatTime(event.start)} - ${formatTime(event.end)}
                         ${timeInfo ? `<span class="ml-2 text-tertiary">${timeInfo}</span>` : ''}
                     </div>
-                    <div class="event-card-title">${escapeHtml(event.title)}</div>
+                    <div class="event-card-title">${escapeHtml(displayTitle)}</div>
                     ${event.description ? `<div class="event-card-description">${escapeHtml(event.description)}</div>` : ''}
                 </div>
             `;
@@ -1779,7 +2259,7 @@
                 </div>
                 <div class="shortcut-item">
                     <span class="text-secondary">Open Now View</span>
-                    <kbd class="shortcut-key">T</kbd>
+                    <kbd class="shortcut-key">N</kbd>
                 </div>
                 <div class="shortcut-item">
                     <span class="text-secondary">Swipe left/right (mobile)</span>
