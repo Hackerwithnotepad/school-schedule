@@ -1067,12 +1067,20 @@
         }
         
         function stripEventTag(title) {
-            // Remove hashtag and everything after it
+            // Remove hashtag itself (not everything after it)
             for (const tags of Object.values(EVENT_TAGS)) {
                 for (const tag of tags) {
-                    const index = title.indexOf(tag);
+                    // Case-insensitive check
+                    const lowerTitle = title.toLowerCase();
+                    const lowerTag = tag.toLowerCase();
+                    const index = lowerTitle.indexOf(lowerTag);
+                    
                     if (index !== -1) {
-                        return title.substring(0, index).trim();
+                        // Remove just the tag, keep everything else
+                        const before = title.substring(0, index);
+                        const after = title.substring(index + tag.length);
+                        // Combine and clean up extra spaces
+                        return (before + after).replace(/\s+/g, ' ').trim();
                     }
                 }
             }
