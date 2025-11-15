@@ -1127,8 +1127,8 @@
             
             // Update progress ring regularly
             setInterval(() => {
-                if (window.nextEventDate && document.visibilityState === 'visible') {
-                    updateProgressRing(window.nextEventDate);
+                if (document.visibilityState === 'visible') {
+                    updateNowViewButton();
                 }
             }, 30000); // Update every 30 seconds
             
@@ -1367,7 +1367,7 @@
                     <svg class="mx-auto h-12 w-12 mb-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <p class="text-lg">No events scheduled</p>
+                    <p class="text-lg">${t('calendar.noEventsScheduled')}</p>
                 `;
                 eventsContainer.appendChild(noEvents);
             } else {
@@ -1391,6 +1391,8 @@
         }
         
         function createDetailedEventCard(event) {
+            const displayTitle = stripEventTag(event.title);
+            const eventType = parseEventType(event.title);
             const now = new Date();
             const eventStart = new Date(event.start);
             const eventEnd = new Date(event.end);
@@ -1401,9 +1403,16 @@
             const card = document.createElement('div');
             card.className = `event-card card-bg rounded-lg p-4 border ${isCurrent ? 'current-event' : 'border-custom'}`;
             
+            // Apply event type styling
+            if (eventType === 'test') {
+                card.classList.add('event-test');
+            } else if (eventType === 'other') {
+                card.classList.add('event-other');
+            }
+            
             const time = document.createElement('div');
             time.className = `text-sm font-semibold mb-2 ${isCurrent ? 'text-blue-600' : 'text-blue-600'}`;
-            time.textContent = event.allDay ? 'All day' : formatTime(event.start);
+            time.textContent = event.allDay ? t('calendar.allDay') : formatTime(event.start);
             
             // Add "NOW" badge if current
             if (isCurrent) {
@@ -1415,7 +1424,7 @@
             
             const title = document.createElement('div');
             title.className = 'text-lg font-medium text-primary mb-2';
-            title.textContent = event.title;
+            title.textContent = displayTitle;
             
             card.appendChild(time);
             card.appendChild(title);
@@ -1592,7 +1601,7 @@
                     const tooltip = document.createElement('div');
                     tooltip.className = 'tooltip-content text-xs';
                     
-                    let tooltipHTML = `<div class="font-semibold text-sm mb-2">${displayTitle}</div>`;
+                    let tooltipHTML = `<div class="font-semibold text-sm mb-2">${escapeHtml(displayTitle)}</div>`;
                     
                     // Time range
                     if (event.allDay) {
@@ -1608,13 +1617,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            <span>${event.location}</span>
+                            <span>${escapeHtml(event.location)}</span>
                         </div>`;
                     }
                     
                     // Notes (only if exists)
                     if (event.description) {
-                        tooltipHTML += `<div class="mt-2 pt-2 border-t border-custom">${event.description}</div>`;
+                        tooltipHTML += `<div class="mt-2 pt-2 border-t border-custom">${escapeHtml(event.description)}</div>`;
                     }
                     
                     tooltip.innerHTML = tooltipHTML;
@@ -1664,7 +1673,7 @@
                 const tooltip = document.createElement('div');
                 tooltip.className = 'tooltip-content text-xs';
                 
-                let tooltipHTML = `<div class="font-semibold text-sm mb-2">${displayTitle}</div>`;
+                let tooltipHTML = `<div class="font-semibold text-sm mb-2">${escapeHtml(displayTitle)}</div>`;
                 
                 // Time range (compact)
                 if (event.allDay) {
@@ -1680,13 +1689,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span>${event.location}</span>
+                        <span>${escapeHtml(event.location)}</span>
                     </div>`;
                 }
                 
                 // Notes (only if exists)
                 if (event.description) {
-                    tooltipHTML += `<div class="mt-2 pt-2 border-t border-custom">${event.description}</div>`;
+                    tooltipHTML += `<div class="mt-2 pt-2 border-t border-custom">${escapeHtml(event.description)}</div>`;
                 }
                 
                 tooltip.innerHTML = tooltipHTML;
@@ -1760,7 +1769,7 @@
             const monthYear = `${monthName} ${year}`;
             document.getElementById('currentMonth').textContent = monthYear;
             
-            // Update button text
+            // Update button text while preserving icons/arrows
             const btnPrev = document.querySelector('button[onclick="previousWeek()"]');
             const btnToday = document.querySelector('button[onclick="today()"]');
             const btnNext = document.querySelector('button[onclick="nextWeek()"]');
@@ -1768,9 +1777,32 @@
             const btnWeek = document.querySelector('button[onclick="setView(\'week\')"]');
             const btnMonth = document.querySelector('button[onclick="setView(\'month\')"]');
             
-            if (btnPrev) btnPrev.textContent = t('buttons.previous');
+            // Previous button has arrow before text
+            if (btnPrev) {
+                const span = btnPrev.querySelector('span');
+                if (span) {
+                    span.textContent = ` ${t('buttons.previous')}`;
+                } else {
+                    // If no span, reconstruct with arrow
+                    btnPrev.innerHTML = `←<span class="hidden sm:inline"> ${t('buttons.previous')}</span>`;
+                }
+            }
+            
+            // Today button (no icon)
             if (btnToday) btnToday.textContent = t('buttons.today');
-            if (btnNext) btnNext.textContent = t('buttons.next');
+            
+            // Next button has arrow after text
+            if (btnNext) {
+                const span = btnNext.querySelector('span');
+                if (span) {
+                    span.textContent = `${t('buttons.next')} `;
+                } else {
+                    // If no span, reconstruct with arrow
+                    btnNext.innerHTML = `<span class="hidden sm:inline">${t('buttons.next')} </span>→`;
+                }
+            }
+            
+            // View buttons (no icons)
             if (btnDay) btnDay.textContent = t('buttons.day');
             if (btnWeek) btnWeek.textContent = t('buttons.week');
             if (btnMonth) btnMonth.textContent = t('buttons.month');
@@ -1872,11 +1904,6 @@
         }
         
         // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                hideKeyboardShortcuts();
-            }
-        });
         
         // ==========================================
         // NEXT EVENT WIDGET
@@ -1953,19 +1980,24 @@
             const clockElement = document.getElementById('nowViewClock');
             const dateElement = document.getElementById('nowViewDate');
             
-            // 12-hour format
+            // 12-hour format with localized AM/PM
             let hours = now.getHours();
             const minutes = now.getMinutes();
-            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const ampm = hours >= 12 ? t('time.pm') : t('time.am');
             hours = hours % 12 || 12;
             const timeString = `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
             
             clockElement.textContent = timeString;
-            dateElement.textContent = now.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                month: 'long', 
-                day: 'numeric' 
-            });
+            
+            // Localized date
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const months = ['january', 'february', 'march', 'april', 'may', 'june',
+                           'july', 'august', 'september', 'october', 'november', 'december'];
+            const dayName = translations[currentLang].daysFull[days[now.getDay()]];
+            const monthName = translations[currentLang].months[months[now.getMonth()]];
+            const dayNum = now.getDate();
+            
+            dateElement.textContent = `${dayName}, ${monthName} ${dayNum}`;
         }
         
         function updateNowViewContent() {
