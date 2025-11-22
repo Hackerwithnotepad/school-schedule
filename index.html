@@ -4,18 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
-    <!-- Browser favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!-- iOS home screen icon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-    <!-- iOS full screen and status bar -->
-    <!-- Enables full-screen web app mode on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- Makes status bar text white and lets background color fill behind notch -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- Theme color for Safari and status bar -->
-    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
@@ -49,12 +38,6 @@
             background-color: var(--bg-secondary);
             color: var(--text-primary);
             transition: background-color 0.3s ease, color 0.3s ease;
-            /* Ensure content is not hidden behind device notch or rounded corners */
-            padding-top: calc(20px + env(safe-area-inset-top));
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-            padding-bottom: env(safe-area-inset-bottom);
-            margin: 0;
         }
         
         /* Smooth transitions for hover effects */
@@ -935,7 +918,7 @@
                 months: { january: "ינואר", february: "פברואר", march: "מרץ", april: "אפריל", may: "מאי", june: "יוני", july: "יולי", august: "אוגוסט", september: "ספטמבר", october: "אוקטובר", november: "נובמבר", december: "דצמבר" },
                 errors: { loadingEvents: "טוען אירועים...", unableToLoad: "לא ניתן לטעון אירועי לוח שנה. אנא בדוק את החיבור שלך ונסה שוב.", connectionError: "שגיאת חיבור" },
                 settings: { title: "הגדרות", darkMode: "מצב כהה", showTests: "הצג רק מבחנים", language: "שפה", refresh: "רענן", auto: "אוטומטי", english: "English", hebrew: "עברית" },
-                time: { am: "AM", pm: "PM" }
+                time: { am: "לפנה\"צ", pm: "אחה\"צ" }
             }
         };
         
@@ -1121,6 +1104,60 @@
         }
         
         // ==========================================
+        // AUTO-ADVANCE TO NEXT DAY
+        // ==========================================
+        
+        function checkAutoAdvance() {
+            // Only auto-advance in day view when viewing today
+            if (currentView !== 'day') return;
+            if (!isSameDay(currentDate, new Date())) return;
+            
+            const now = new Date();
+            const todayEvents = getEventsForDate(currentDate);
+            
+            // Get only timed events (ignore all-day events)
+            const timedEvents = todayEvents.filter(event => !event.allDay);
+            
+            // If no timed events at all, don't auto-advance
+            if (timedEvents.length === 0) return;
+            
+            // Check if all timed events have ended
+            const allEventsEnded = timedEvents.every(event => {
+                const eventEnd = new Date(event.end);
+                return now > eventEnd;
+            });
+            
+            // If all timed events have ended, find next day with timed events
+            if (allEventsEnded) {
+                const nextDay = findNextDayWithTimedEvents();
+                if (nextDay) {
+                    currentDate = nextDay;
+                    renderCalendar();
+                }
+            }
+        }
+        
+        function findNextDayWithTimedEvents() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Look ahead up to 30 days
+            for (let i = 1; i <= 30; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(today.getDate() + i);
+                
+                const dayEvents = getEventsForDate(checkDate);
+                const hasTimedEvents = dayEvents.some(event => !event.allDay);
+                
+                if (hasTimedEvents) {
+                    return checkDate;
+                }
+            }
+            
+            return null; // No events found in next 30 days
+        }
+        
+        // ==========================================
         // INITIALIZATION
         // ==========================================
         
@@ -1142,10 +1179,11 @@
                 }
             }, 300000); // Check every 5 minutes, but only fetch if visible
             
-            // Update progress ring regularly
+            // Update progress ring and check auto-advance regularly
             setInterval(() => {
                 if (document.visibilityState === 'visible') {
                     updateNowViewButton();
+                    checkAutoAdvance(); // Check if we should advance to next day
                 }
             }, 30000); // Update every 30 seconds
             
@@ -1153,6 +1191,7 @@
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') {
                     fetchEvents();
+                    checkAutoAdvance(); // Check if we should advance when user returns
                 }
             });
             
@@ -1286,6 +1325,7 @@
                     events = JSON.parse(cached);
                     renderCalendar();
                     updateNowView();
+                    checkAutoAdvance(); // Check if we should advance with cached data
                     document.getElementById('calendar').classList.remove('hidden');
                 }
             } catch (e) {
@@ -1329,6 +1369,7 @@
                 
                 renderCalendar();
                 updateNowView();
+                checkAutoAdvance(); // Check if we should advance after loading events
                 showLoading(false);
                 
             } catch (error) {
