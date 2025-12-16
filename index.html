@@ -1132,6 +1132,7 @@
                 const nextDay = findNextDayWithTimedEvents();
                 if (nextDay) {
                     currentDate = nextDay;
+                    saveCurrentDate();
                     renderCalendar();
                 }
             }
@@ -1164,6 +1165,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             initTheme();
             initLanguage();
+
+            // Restore saved view from sessionStorage
+            const savedView = sessionStorage.getItem('calendarView');
+            if (savedView && ['day', 'week', 'month'].includes(savedView)) {
+                currentView = savedView;
+                setView(savedView);
+            }
+
+            // Restore saved date from sessionStorage
+            const savedDate = sessionStorage.getItem('calendarDate');
+            if (savedDate) {
+                const restoredDate = new Date(savedDate);
+                // Validate the date is valid
+                if (!isNaN(restoredDate.getTime())) {
+                    currentDate = restoredDate;
+                }
+            }
+
             updateHeader();
             
             // Load cached events first for instant display
@@ -1539,6 +1558,7 @@
                 // Add click handler to navigate to day view
                 dayColumn.onclick = () => {
                     currentDate = new Date(day);
+                    saveCurrentDate();
                     setView('day');
                 };
                 
@@ -1616,6 +1636,7 @@
                 if (isCurrentMonth) {
                     dayCell.onclick = () => {
                         currentDate = new Date(day);
+                        saveCurrentDate();
                         setView('day');
                     };
                 }
@@ -1882,7 +1903,12 @@
         // ==========================================
         // NAVIGATION
         // ==========================================
-        
+
+        // Helper function to save current date to sessionStorage
+        function saveCurrentDate() {
+            sessionStorage.setItem('calendarDate', currentDate.toISOString());
+        }
+
         function previousWeek() {
             if (currentView === 'day') {
                 currentDate.setDate(currentDate.getDate() - 1);
@@ -1891,6 +1917,7 @@
             } else {
                 currentDate.setMonth(currentDate.getMonth() - 1);
             }
+            saveCurrentDate();
             updateHeader();
             fetchEvents();
         }
@@ -1903,19 +1930,24 @@
             } else {
                 currentDate.setMonth(currentDate.getMonth() + 1);
             }
+            saveCurrentDate();
             updateHeader();
             fetchEvents();
         }
         
         function today() {
             currentDate = new Date();
+            saveCurrentDate();
             updateHeader();
             fetchEvents();
         }
         
         function setView(view) {
             currentView = view;
-            
+
+            // Save view to sessionStorage
+            sessionStorage.setItem('calendarView', view);
+
             // Update button styles
             const dayBtn = document.getElementById('dayViewBtn');
             const weekBtn = document.getElementById('weekViewBtn');
