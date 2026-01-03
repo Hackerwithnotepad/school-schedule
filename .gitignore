@@ -2,8 +2,12 @@
 node_modules/
 *.log
 working calendar.html
+*.code-workspace
+.vscode/
+.DS_Store
 .env
-.vscode
+.env.local
+.dev.vars
 dist/
 build/
 .idea/
